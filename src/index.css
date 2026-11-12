@@ -1,0 +1,398 @@
+@import "tailwindcss";
+
+/* ===== GLOBAL RESET & BASE STYLES ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #06060c;
+  color: #e2e8f0;
+  font-family: 'Press Start 2P', monospace;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  user-select: none;
+}
+
+/* Pixel-art crisp rendering across all browsers */
+img, canvas, .pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* 16-bit retro typography utility classes */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+}
+
+.font-terminal {
+  font-family: 'VT323', monospace;
+}
+
+.font-silkscreen {
+  font-family: 'Silkscreen', monospace;
+}
+
+/* CRT Scanlines Overlay */
+.crt-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.35) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 4px, 6px 100%;
+  z-index: 50;
+  opacity: 0.85;
+}
+
+.crt-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.75) 100%);
+  z-index: 51;
+}
+
+/* Screen Glitch Effects */
+@keyframes screen-glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-3px, 3px) }
+  40% { transform: translate(-3px, -3px) }
+  60% { transform: translate(3px, 3px) }
+  80% { transform: translate(3px, -3px) }
+  100% { transform: translate(0) }
+}
+
+.animate-glitch {
+  animation: screen-glitch 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+@keyframes rgb-split {
+  0% {
+    text-shadow: -2px 0 #ff0055, 2px 0 #00ffff;
+  }
+  50% {
+    text-shadow: 2px 0 #ff0055, -2px 0 #00ffff;
+  }
+  100% {
+    text-shadow: -2px 0 #ff0055, 2px 0 #00ffff;
+  }
+}
+
+.animate-rgb-split {
+  animation: rgb-split 0.15s infinite;
+}
+
+/* Screen tear keyframes */
+@keyframes screen-tear {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  15% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translateX(-8px);
+  }
+  30% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translateX(8px);
+  }
+  45% {
+    clip-path: inset(10% 0 80% 0);
+    transform: translateX(-4px);
+  }
+  60% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translateX(4px);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
+  }
+}
+
+.animate-tear {
+  animation: screen-tear 0.3s steps(2) infinite;
+}
+
+/* Pulsing text glow */
+@keyframes neon-pulse-red {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #ef4444) drop-shadow(0 0 12px #991b1b);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #dc2626) drop-shadow(0 0 20px #ef4444);
+  }
+}
+
+.glow-red {
+  animation: neon-pulse-red 1.5s ease-in-out infinite;
+}
+
+@keyframes neon-pulse-gold {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #fbbf24) drop-shadow(0 0 10px #d97706);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #f59e0b) drop-shadow(0 0 25px #fbbf24);
+  }
+}
+
+.glow-gold {
+  animation: neon-pulse-gold 2s ease-in-out infinite;
+}
+
+/* Custom retro scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ===== REALISTIC RETRO HARDWARE & CRT MONITOR STYLES ===== */
+
+/* Metallic Brushed Monitor Bezel */
+.bezel-chassis {
+  background: linear-gradient(135deg, #22252e 0%, #171922 45%, #0f1118 70%, #1a1c25 100%);
+  box-shadow: 
+    inset 1px 1px 0 rgba(255, 255, 255, 0.12),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.6),
+    0 20px 45px -10px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 0, 0, 0.9);
+}
+
+.bezel-inner-frame {
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.9),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.08),
+    0 0 0 1px #090a0f;
+}
+
+/* CRT Convex Glass Glare Sheen */
+.crt-glass-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.03) 22%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  z-index: 52;
+}
+
+/* Subtle Phosphor Aperture Grille */
+.crt-aperture-grille {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.015) 0px,
+    rgba(0, 255, 0, 0.015) 1px,
+    rgba(0, 0, 255, 0.015) 2px,
+    transparent 3px
+  );
+  z-index: 49;
+  opacity: 0.75;
+}
+
+/* Hardware Status LEDs */
+.led-power-green {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px #22c55e, 0 0 12px rgba(34, 197, 94, 0.6);
+}
+
+.led-signal-amber {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b, 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.led-rec-red {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px #ef4444, 0 0 14px rgba(239, 68, 68, 0.8);
+  animation: led-blink 1.2s infinite;
+}
+
+@keyframes led-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Tactile 3D Console Push Buttons */
+.btn-tactile {
+  background: linear-gradient(180deg, #242938 0%, #151926 100%);
+  border: 1px solid #3b4256;
+  border-bottom: 2px solid #0d101a;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.1s ease-in-out;
+}
+
+.btn-tactile:hover {
+  background: linear-gradient(180deg, #2e3549 0%, #1c2233 100%);
+  border-color: #4f5873;
+}
+
+.btn-tactile:active {
+  transform: translateY(1px);
+  border-bottom-width: 1px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.btn-tactile-primary {
+  background: linear-gradient(180deg, #0e7490 0%, #083344 100%);
+  border: 1px solid #06b6d4;
+  border-bottom: 2px solid #042f2e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 8px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-tactile-primary:hover {
+  background: linear-gradient(180deg, #0891b2 0%, #0e7490 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 12px rgba(6, 182, 212, 0.5);
+}
+
+/* Audio Waveform Equalizer Animation */
+@keyframes eq-bounce-1 {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+@keyframes eq-bounce-2 {
+  0%, 100% { height: 12px; }
+  50% { height: 6px; }
+}
+@keyframes eq-bounce-3 {
+  0%, 100% { height: 6px; }
+  50% { height: 16px; }
+}
+@keyframes eq-bounce-4 {
+  0%, 100% { height: 14px; }
+  50% { height: 8px; }
+}
+
+.eq-bar-1 { animation: eq-bounce-1 0.45s ease-in-out infinite; }
+.eq-bar-2 { animation: eq-bounce-2 0.35s ease-in-out infinite; }
+.eq-bar-3 { animation: eq-bounce-3 0.52s ease-in-out infinite; }
+.eq-bar-4 { animation: eq-bounce-4 0.40s ease-in-out infinite; }
+
+/* ===== SAATCHI HOUSE DESIGN SYSTEM TOKENS & COMPONENTS ===== */
+:root {
+  /* Palette · Lobby (Light) */
+  --saatchi-lobby-white: #FAFAF7;
+  --saatchi-make-blue: #0B3BD3;
+  --saatchi-make-pink: #E5007D;
+  --saatchi-glass: #EEF1F8;
+  --saatchi-blueprint: #C9D2EE;
+  --saatchi-ink: #121417;
+
+  /* Palette · Basement B1 (Dark) */
+  --saatchi-rack: #151A26;
+  --saatchi-signal-blue: #6E8BFF;
+  --saatchi-alarm-pink: #FF4FA8;
+  --saatchi-gold: #f2b53a;
+  --saatchi-line: #2c3246;
+  --saatchi-shadow: #05060a;
+}
+
+/* Saatchi House Tactile Button (ob-press style) */
+.saatchi-btn-primary {
+  background: var(--saatchi-make-blue);
+  color: #ffffff;
+  border: 2px solid var(--saatchi-ink);
+  box-shadow: 2px 2px 0px var(--saatchi-ink);
+  transition: all 0.12s ease-in-out;
+}
+
+.saatchi-btn-primary:hover {
+  background: #082a99;
+  box-shadow: 3px 3px 0px var(--saatchi-ink);
+}
+
+.saatchi-btn-primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--saatchi-ink);
+}
+
+/* Saatchi B1 Signal / Alarm Button */
+.saatchi-btn-signal {
+  background: var(--saatchi-signal-blue);
+  color: #0b0f19;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px rgba(110, 139, 255, 0.4);
+  font-weight: bold;
+}
+
+.saatchi-btn-signal:hover {
+  background: #8fa5ff;
+  box-shadow: 0 0 14px rgba(110, 139, 255, 0.6);
+}
+
+.saatchi-btn-alarm {
+  background: var(--saatchi-alarm-pink);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 12px rgba(255, 79, 168, 0.5);
+  font-weight: bold;
+}
+
+/* Saatchi Wayfinding Floor Button (1F, 2F, B1) */
+.saatchi-floor-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--saatchi-ink);
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  transition: all 0.15s ease-in-out;
+}
+
+.saatchi-floor-active {
+  background: var(--saatchi-signal-blue);
+  color: #060913;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(110, 139, 255, 0.6);
+}
+
+.saatchi-floor-idle {
+  background: var(--saatchi-rack);
+  color: #8b92a5;
+  border-color: #2c3246;
+}
+
+.saatchi-floor-idle:hover {
+  background: #1e2436;
+  color: #d1d5db;
+  border-color: #4b5563;
+}
+
+/* Saatchi Staff Keycard Badge Container */
+.saatchi-keycard-badge {
+  background: var(--saatchi-rack);
+  border: 1px solid var(--saatchi-line);
+  box-shadow: 0 4px 12px var(--saatchi-shadow);
+  border-radius: 4px;
+}
